@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Slider from "react-slick";
-import Cards from "./cards";
+import Cards from "./Cards";
 import axios from "axios";
 
 import "slick-carousel/slick/slick.css";
