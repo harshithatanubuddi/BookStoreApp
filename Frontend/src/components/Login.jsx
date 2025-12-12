@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import axios from 'axios';
+import { toast } from 'react-hot-toast';
 
 function Login() {
 
@@ -12,8 +14,36 @@ function Login() {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log("LOGIN DATA:", data);
+  const onSubmit = async (data) => {
+    const userInfo = {  
+          email: data.email,
+          password: data.password
+        };
+        //To call the backend API for signup, we use axios here.
+        await axios.post("http://localhost:4001/user/login", userInfo).then((response) => {
+          console.log(response.data);
+          if (response.status === 200) {
+            toast.success('Login successful!');
+            document.getElementById("my_modal_3").close();  // Close login modal
+            setTimeout(() => {
+
+            window.location.reload();                     // Reload to update navbar
+            localStorage.setItem("Users", JSON.stringify(response.data.user));
+              },3000);
+            
+          }
+          
+          navigate("/"); // Redirect to home or login page after successful signup
+        }).catch((error) => {
+          if(error.response){
+            console.log(error);
+            toast.error('Login failed! Please sign up');
+            setTimeout(() => {},1000);
+            return;
+          }
+          console.error("There was an error during signup!", error);
+          alert("Signup failed! Please try again."+error.message);
+        });
   };
 
   const goToSignup = () => {

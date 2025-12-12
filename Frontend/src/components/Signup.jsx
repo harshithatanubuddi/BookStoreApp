@@ -1,9 +1,13 @@
 import React from 'react';
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import Login from "./Login"; 
 import { useForm } from "react-hook-form";
+import axios from 'axios';
+import { toast } from 'react-hot-toast';
 
 function Signup() {
+  const location=useLocation();
+  const from=location.state?.from?.pathname || "/";
   const {
     register,
     handleSubmit,
@@ -12,8 +16,30 @@ function Signup() {
 
   const navigate = useNavigate();
 
-  const onSubmit = (data) => {
-    console.log("SIGNUP FORM DATA:", data);
+  const onSubmit = async (data) => {
+    const userInfo = {
+      fullname: data.fullname,   
+      email: data.email,
+      password: data.password
+    };
+    //To call the backend API for signup, we use axios here.
+    await axios.post("http://localhost:4001/user/signup", userInfo).then((response) => {
+      console.log(response.data);
+      if (response.status === 201) {
+        toast.success('Signup successful!');
+        navigate(from,{replace:true});
+      }
+      localStorage.setItem("Users", JSON.stringify(response.data.user));
+      navigate("/"); // Redirect to home or login page after successful signup
+    }).catch((error) => {
+      if(error.response){
+        console.log(error);
+        toast.error("Signup failed! " + error.response.data.message);
+        return;
+      }
+      console.error("There was an error during signup!", error);
+      alert("Signup failed! Please try again."+error.message);
+    });
   };
 
   return (
@@ -23,7 +49,6 @@ function Signup() {
                       border border-gray-300 dark:border-gray-700 
                       shadow-lg rounded-lg p-8 relative">
 
-        {/* Close Button → Homepage */}
         <button
           className="btn btn-sm btn-circle btn-ghost absolute right-3 top-3 dark:text-white"
           onClick={() => navigate("/")}
@@ -31,20 +56,43 @@ function Signup() {
           ✕
         </button>
 
-        {/* Title */}
         <h3 className="text-2xl font-bold text-center text-gray-800 dark:text-white">
           Create an Account
         </h3>
 
-        {/* ✅ FORM STARTS HERE */}
+        {/* ✅ FORM STARTS */}
         <form onSubmit={handleSubmit(onSubmit)}>
 
-          {/* Email Field */}
+          {/* ⭐ Username Field (Added) */}
           <div className="mt-6">
             <label
-              htmlFor="email"
+              htmlFor="username"
               className="text-gray-700 dark:text-gray-300"
             >
+              Username
+            </label>
+
+            <input
+              id="username"
+              type="text"
+              placeholder="Enter a username"
+              autoComplete="username"
+              {...register("fullname", { required: true })}
+              className="w-full px-3 py-2 mt-1 border rounded-md outline-none
+                         dark:bg-slate-900 dark:text-white
+                         border-gray-300 dark:border-gray-600"
+            />
+
+            {errors.fullname && (
+              <span className="text-sm text-red-500">
+                This field is required
+              </span>
+            )}
+          </div>
+
+          {/* Email Field */}
+          <div className="mt-4">
+            <label htmlFor="email" className="text-gray-700 dark:text-gray-300">
               Email
             </label>
 
@@ -53,26 +101,20 @@ function Signup() {
               type="email"
               placeholder="Enter your email"
               autoComplete="email"
-              {...register("email", { required: true })}   // ✅ Hook Form
+              {...register("email", { required: true })}
               className="w-full px-3 py-2 mt-1 border rounded-md outline-none
                          dark:bg-slate-900 dark:text-white
                          border-gray-300 dark:border-gray-600"
             />
 
-            {/* Email Error */}
             {errors.email && (
-              <span className="text-sm text-red-500">
-                This field is required
-              </span>
+              <span className="text-sm text-red-500">This field is required</span>
             )}
           </div>
 
           {/* Password Field */}
           <div className="mt-4">
-            <label
-              htmlFor="password"
-              className="text-gray-700 dark:text-gray-300"
-            >
+            <label htmlFor="password" className="text-gray-700 dark:text-gray-300">
               Password
             </label>
 
@@ -81,17 +123,14 @@ function Signup() {
               type="password"
               placeholder="Enter your password"
               autoComplete="new-password"
-              {...register("password", { required: true })}  // ✅ Hook Form
+              {...register("password", { required: true })}
               className="w-full px-3 py-2 mt-1 border rounded-md outline-none
                          dark:bg-slate-900 dark:text-white
                          border-gray-300 dark:border-gray-600"
             />
 
-            {/* Password Error */}
             {errors.password && (
-              <span className="text-sm text-red-500">
-                This field is required
-              </span>
+              <span className="text-sm text-red-500">This field is required</span>
             )}
           </div>
 
@@ -104,9 +143,8 @@ function Signup() {
             Signup
           </button>
         </form>
-        {/* ✅ FORM ENDS */}
+        {/* FORM ENDS */}
 
-        {/* Already registered */}
         <div className="text-center mt-4 text-gray-700 dark:text-gray-300">
           Already have an account?{" "}
           <button

@@ -1,22 +1,28 @@
 import React, { useEffect, useState } from "react";
 import Slider from "react-slick";
-
 import Cards from "./cards";
+import axios from "axios";
 
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 function Freebook() {
-  const [list, setList] = useState([]);
+  const [book, setBook] = useState([]);
 
   useEffect(() => {
-    fetch("/list.json")
-      .then((res) => res.json())
-      .then((data) => setList(data))
-      .catch((err) => console.error("Error loading list.json:", err));
+    const fetchHomeBooks = async () => {
+      try {
+        const res = await axios.get("http://localhost:4001/book?page=Home");
+        setBook(res.data);
+      } catch (err) {
+        console.error("Error loading Home books:", err);
+      }
+    };
+
+    fetchHomeBooks();
   }, []);
 
-  const filterData = list.filter((item) => item.category === "Free");
+  const filterData = book; // already filtered by backend
 
   const settings = {
     dots: true,
@@ -38,7 +44,6 @@ function Freebook() {
       dark:from-slate-900 dark:to-slate-900
     ">
 
-      {/* Section Header */}
       <div className="text-center mb-10">
         <h1 className="text-4xl font-extrabold text-gray-900 dark:text-white tracking-tight">
           <span className="text-orange-600">Free</span> Courses for You 🎁
@@ -51,7 +56,6 @@ function Freebook() {
         </p>
       </div>
 
-      {/* ✅ Slider with full dark theme matching UI */}
       <div
         className="
           max-w-screen-2xl container mx-auto md:px-20 px-6
@@ -68,7 +72,7 @@ function Freebook() {
         >
           <Slider {...settings}>
             {filterData.map((item) => (
-              <Cards key={item.id} item={item} />
+              <Cards key={item._id} item={item} />
             ))}
           </Slider>
         </div>

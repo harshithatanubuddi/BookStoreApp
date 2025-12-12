@@ -1,101 +1,101 @@
 [
-    {
-        "id":1,
-        "name":"Story Book",
-        "title":"The Adventure Begins",
-        "price":0,
-        "category":"Free",
-        "image":"/bookimg3.jpeg"
-    },
-
-    {
-        "id":2,
-        "name":"Comedy Book",
-        "title":"The Adventure Begins",
-        "price":20,
-        "category":"Entertainment",
-        "image":"/bookimg3.jpeg"
-    },
-
-
-    {
-        "id":3,
-        "name":"Java Course",
-        "title":"The Adventure Begins",
-        "price":50,
-        "category":"Course",
-        "image":"/bookimg3.jpeg"
-    },
-
-    {
-        "id":4,
-        "name":"Horror Book",
-        "title":"The Adventure Begins",
-        "price":0,
-        "category":"Free",
-        "image":"/bookimg3.jpeg"
-    },
-
-    {
-        "id":5,
-        "name":"Music Book",
-        "title":"The Adventure Begins",
-        "price":0,
-        "category":"Free",
-        "image":"/bookimg3.jpeg"
-    },
-
-    {
-        "id":6,
-        "name":"Juice Book",
-        "title":"The Adventure Begins",
-        "price":0,
-        "category":"Free",
-        "image":"/bookimg3.jpeg"
-    },
-
-    {
-        "id":7,
-        "name":"Art Book",
-        "title":"The Adventure Begins",
-        "price":0,
-        "category":"Free",
-        "image":"/bookimg3.jpeg"
-    },
-
-    {
-        "id":8,
-        "name":"Sports Book",
-        "title":"The Adventure Begins",
-        "price":0,
-        "category":"Free",
-        "image":"/bookimg3.jpeg"
-    },
-
-    {
-        "id":9,
-        "name":"Food Book",
-        "title":"The Adventure Begins",
-        "price":0,
-        "category":"Free",
-        "image":"/bookimg3.jpeg"
-    },
-
-    {
-        "id":10,
-        "name":"Cars Book",
-        "title":"The Adventure Begins",
-        "price":0,
-        "category":"Free",
-        "image":"/bookimg3.jpeg"
-    },
-
-    {
-        "id":11,
-        "name":"Comic Book",
-        "title":"The Adventure Begins",
-        "price":0,
-        "category":"Free",
-        "image":"/bookimg3.jpeg"
-    }
+  {
+    "id": 1,
+    "name": "Story Book",
+    "title": "The Adventure Begins",
+    "price": 0,
+    "category": "Free",
+    "image": "/bookimg3.jpeg",
+    "page": "Course"
+  },
+  {
+    "id": 2,
+    "name": "Comedy Book",
+    "title": "The Adventure Begins",
+    "price": 20,
+    "category": "Entertainment",
+    "image": "/bookimg3.jpeg",
+    "page": "Course"
+  },
+  {
+    "id": 3,
+    "name": "Java Course",
+    "title": "The Adventure Begins",
+    "price": 50,
+    "category": "Course",
+    "image": "/bookimg3.jpeg",
+    "page": "Course"
+  },
+  {
+    "id": 4,
+    "name": "Horror Book",
+    "title": "The Adventure Begins",
+    "price": 0,
+    "category": "Free",
+    "image": "/bookimg3.jpeg",
+    "page": "Course"
+  },
+  {
+    "id": 5,
+    "name": "Music Book",
+    "title": "The Adventure Begins",
+    "price": 0,
+    "category": "Free",
+    "image": "/bookimg3.jpeg",
+    "page": "Course"
+  },
+  {
+    "id": 6,
+    "name": "Juice Book",
+    "title": "The Adventure Begins",
+    "price": 0,
+    "category": "Free",
+    "image": "/bookimg3.jpeg",
+    "page": "Course"
+  },
+  {
+    "id": 7,
+    "name": "Art Book",
+    "title": "The Adventure Begins",
+    "price": 0,
+    "category": "Free",
+    "image": "/bookimg3.jpeg",
+    "page": "Course"
+  },
+  {
+    "id": 8,
+    "name": "Sports Book",
+    "title": "The Adventure Begins",
+    "price": 0,
+    "category": "Free",
+    "image": "/bookimg3.jpeg",
+    "page": "Course"
+  },
+  {
+    "id": 9,
+    "name": "Food Book",
+    "title": "The Adventure Begins",
+    "price": 0,
+    "category": "Free",
+    "image": "/bookimg3.jpeg",
+    "page": "Course"
+  },
+  {
+    "id": 10,
+    "name": "Cars Book",
+    "title": "The Adventure Begins",
+    "price": 0,
+    "category": "Free",
+    "image": "/bookimg3.jpeg",
+    "page": "Course"
+  },
+  {
+    "id": 11,
+    "name": "Comic Book",
+    "title": "The Adventure Begins",
+    "price": 0,
+    "category": "Free",
+    "image": "/bookimg3.jpeg",
+    "page": "Course"
+  }
 ]
