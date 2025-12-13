@@ -14,8 +14,7 @@ app.use(express.json());
 
 const port = process.env.PORT || 4000;
 
-// 🔧 ONLY CHANGE IS HERE
-const URI = process.env.MONGO_URI;
+const URI = process.env.MongoDB_URI;
 
 // Connect to MongoDB
 mongoose.connect(URI)
