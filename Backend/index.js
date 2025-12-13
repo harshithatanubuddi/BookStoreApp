@@ -3,18 +3,18 @@ import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import bookRoutes from './route/book_route.js';
 import cors from 'cors';
-
 import userRoutes from './route/user_route.js';
-
 
 dotenv.config();
 const app = express();
 
 // Middleware
 app.use(cors());
-app.use(express.json());//to parse JSON bodies otherwise req.body will be undefined i.e, we can't access the data sent in the request body
+app.use(express.json());
 
 const port = process.env.PORT || 4000;
+
+// 🔧 ONLY CHANGE IS HERE
 const URI = process.env.MongoDB_URI;
 
 // Connect to MongoDB
