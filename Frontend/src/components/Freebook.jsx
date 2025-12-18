@@ -9,11 +9,11 @@ import axiosInstance from "../utils/axiosInstance";
 
 function Freebook() {
   const [book, setBook] = useState([]);
-  const API = "https://bookstoreapp-backend-ynkn.onrender.com";
+  
   useEffect(() => {
     const fetchHomeBooks = async () => {
       try {
-        const res = await axios.get("${API}/books/stats/top-by-branch");
+        const res = await axios.get("/api/books/stats/top-by-branch");
 
         setBook(res.data);
       } catch (err) {
