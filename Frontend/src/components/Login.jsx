@@ -14,7 +14,7 @@ function Login() {
     handleSubmit,
     formState: { errors },
   } = useForm();
-
+  const API = "https://bookstoreapp-backend-ynkn.onrender.com";
   // const onSubmit = async (data) => {
   //   const userInfo = {  
   //         email: data.email,
@@ -60,7 +60,7 @@ function Login() {
 const onSubmit = async (data) => {
   try {
     const response = await axios.post(
-      "http://localhost:4001/user/login",
+      "${API}/user/login",
       {
         email: data.email,
         password: data.password,
