@@ -12,55 +12,56 @@ BODY:
 }
 */
 export const checkout = async (req, res) => {
+  const { items } = req.body;
+
+  // ✅ Validate BEFORE transaction
+  if (!items || items.length === 0) {
+    return res.status(400).json({ message: "Cart is empty" });
+  }
+
   const session = await mongoose.startSession();
 
   try {
     session.startTransaction();
 
     const userId = req.user._id;
-    const { items } = req.body;
-
-    if (!items || items.length === 0) {
-      return res.status(400).json({ message: "Cart is empty" });
-    }
-
     let totalAmount = 0;
     const orderItems = [];
 
-    // 🔐 Validate + Lock stock
+    // 🔐 Atomic stock check + decrement
     for (const item of items) {
-      const book = await Book.findById(item.bookId).session(session);
+      const book = await Book.findOneAndUpdate(
+        {
+          _id: item.bookId,
+          stockQuantity: { $gte: item.quantity },
+        },
+        {
+          $inc: { stockQuantity: -item.quantity },
+        },
+        { new: true, session }
+      );
 
       if (!book) {
-        throw new Error("Book not found");
+        throw new Error("Book out of stock");
       }
-
-      if (book.stockQuantity < item.quantity) {
-        throw new Error(`"${book.title}" is out of stock`);
-      }
-
-      // Reduce stock
-      book.stockQuantity -= item.quantity;
-      await book.save({ session });
 
       totalAmount += book.price * item.quantity;
 
       orderItems.push({
         book: book._id,
         quantity: item.quantity,
-        price: book.price
+        price: book.price,
       });
     }
 
-    // 🧾 Create Order
-    const order = await Order.create(
+    const [order] = await Order.create(
       [
         {
           user: userId,
           items: orderItems,
           totalAmount,
-          status: "CONFIRMED"
-        }
+          status: "CONFIRMED",
+        },
       ],
       { session }
     );
@@ -70,15 +71,14 @@ export const checkout = async (req, res) => {
 
     res.status(201).json({
       message: "Checkout successful",
-      order: order[0]
+      order,
     });
-
   } catch (error) {
     await session.abortTransaction();
     session.endSession();
 
     res.status(400).json({
-      message: error.message || "Checkout failed"
+      message: error.message || "Checkout failed",
     });
   }
 };
@@ -127,6 +127,10 @@ export const cancelOrder = async (req, res) => {
     return res.status(404).json({ message: "Order not found" });
   }
 
+  if (["SHIPPED", "DELIVERED"].includes(order.status)) {
+  return res.status(400).json({ message: "Cannot cancel shipped order" });
+}
+
   if (order.status === "CANCELLED") {
     return res.status(400).json({ message: "Order already cancelled" });
   }
@@ -141,4 +145,5 @@ export const cancelOrder = async (req, res) => {
   await order.save();
 
   res.json({ message: "Order cancelled & stock restored" });
+  
 };

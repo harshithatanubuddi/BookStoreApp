@@ -13,11 +13,12 @@ function Freebook() {
   useEffect(() => {
     const fetchHomeBooks = async () => {
       try {
-        const res = await axios.get("http://localhost:4001/book/stats/top-by-branch");
+        const res = await axios.get("https://bookstoreapp-backend-ynkn.onrender.com/book/stats/top-by-branch");
 
-        setBook(res.data);
+        setBook(Array.isArray(res.data.books) ? res.data.books : []);
       } catch (err) {
         console.error("Error loading Home books:", err);
+        setBook([]);
       }
     };
 
@@ -83,7 +84,16 @@ function Freebook() {
               <Cards key={item._id} item={item} />
             ))}
           </Slider> */}
+          {book.length > 0 ? (
+              book.map((item) => (
+                <Card key={item._id} item={item} />
+              ))
+            ) : (
+              <p>No books available</p>
+            )}
           <Slider {...settings}>
+            
+
             {book.map((item) => (
               <div
               key={item._id}

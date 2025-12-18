@@ -97,3 +97,19 @@ export const topBooksByBranch = async (req, res) => {
     res.status(500).json({ message: "Failed to load stats" });
   }
 };
+
+export const checkStock = async (req, res) => {
+  const { bookId } = req.params;
+
+  const book = await Book.findById(bookId).select("stockQuantity");
+
+  if (!book) {
+    return res.status(404).json({ message: "Book not found" });
+  }
+
+  if (book.stockQuantity <= 0) {
+    return res.status(400).json({ message: "Out of stock" });
+  }
+
+  res.json({ inStock: true });
+};

@@ -5,7 +5,7 @@ function MyOrders() {
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
-    axiosInstance.get("/orders/my-orders")
+    axiosInstance.get("/order/my-orders")
       .then(res => setOrders(res.data))
       .catch(err => console.log(err));
   }, []);

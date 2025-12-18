@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Cards from './Cards';
 import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import axiosInstance from "../utils/axiosInstance";
 
 function Course() {
   const [searchParams] = useSearchParams();
@@ -24,7 +25,7 @@ function Course() {
   useEffect(() => {
     const getBook = async () => {
       try {
-       const res = await axios.get("http://localhost:4001/book", {
+       const res = await axios.get("/book", {
         params: {
           branch: branch !== "ALL" ? branch : undefined,
           subject: subject !== "ALL" ? subject : undefined,

@@ -22,10 +22,16 @@ const orderSchema = new mongoose.Schema({
   ],
   totalAmount: Number,
   status: {
-    type: String,
-    enum: ["PLACED", "CANCELLED", "DELIVERED"],
-    default: "PLACED",
-  },
+  type: String,
+  enum: [
+    "PENDING",
+    "CONFIRMED",
+    "SHIPPED",
+    "DELIVERED",
+    "CANCELLED"
+  ],
+  default: "PENDING"
+},
 }, { timestamps: true });
 
 export default mongoose.model("Order", orderSchema);

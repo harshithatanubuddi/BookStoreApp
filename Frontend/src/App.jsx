@@ -14,6 +14,7 @@ import AdminDashboard from "./pages/adminpages/AdminDashboard";
 import AdminBooks from "./pages/adminpages/AdminBooks";
 import Admin from "./pages/Admin";
 import MyOrders from './pages/MyOrders.jsx';
+import OrderSuccess from './pages/OrderSuccess.jsx';
 
 const App = () => {
   const [authUser, setAuthUser] = useAuth(); // get authUser and setAuthUser from context
@@ -62,6 +63,7 @@ const App = () => {
           authUser ? <MyOrders /> : <Navigate to="/login" />
         }
       />
+      <Route path="/order-success" element={<OrderSuccess />} />
 
     </Routes>
     <Toaster />

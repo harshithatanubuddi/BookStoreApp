@@ -10,15 +10,21 @@ dotenv.config();
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "https://bookstoreapp-sdzv.onrender.com",
+    ],
+    credentials: true,
+  })
+);
 app.use(express.json());
-// Middleware
-app.use(cors());
-app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.use("/admin", adminRoutes);
 app.use("/book", bookRoutes);
-app.use("/api/orders", orderRoutes);
+app.use("/order", orderRoutes);
 
 const port = process.env.PORT || 4000;
 

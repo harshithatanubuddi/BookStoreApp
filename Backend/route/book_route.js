@@ -7,6 +7,7 @@ import {
   updateBook,
   deleteBook,
   topBooksByBranch,
+  checkStock,
 } from "../controller/book_controller.js";
 
 import { protect, isAdmin } from "../middleware/authMiddleware.js";
@@ -18,6 +19,7 @@ router.get("/stats/top-by-branch", topBooksByBranch);
 router.get("/", getBooks);
 router.get("/:id", getBookById);
 router.get("/:id/related", getRelatedBooks);
+router.get("/check-stock/:bookId", checkStock);
 
 /* ADMIN */
 router.post("/create", protect, isAdmin, createBook);

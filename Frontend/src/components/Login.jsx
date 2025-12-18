@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import { useAuth } from "../context/AuthProvider";
+import axiosInstance from "../utils/axiosInstance";
 
 function Login() {
 
@@ -60,7 +61,7 @@ function Login() {
 const onSubmit = async (data) => {
   try {
     const response = await axios.post(
-      "http://localhost:4001/user/login",
+      "/user/login",
       {
         email: data.email,
         password: data.password,
@@ -82,7 +83,7 @@ const onSubmit = async (data) => {
     if (user.role === "admin") {
       navigate("/admin");
     } else {
-      navigate("/");
+      navigate("/", { replace: true });
     }
 
   } catch (error) {
@@ -93,7 +94,7 @@ const onSubmit = async (data) => {
 
   const goToSignup = () => {
     document.getElementById("my_modal_3").close();  // ✅ Close login modal
-    navigate("/signup");                            // ✅ Redirect to signup
+    navigate("/signup");   // ✅ Redirect to signup
   };
 
   return (

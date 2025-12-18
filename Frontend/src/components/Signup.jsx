@@ -4,6 +4,7 @@ import Login from "./Login";
 import { useForm } from "react-hook-form";
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
+import axiosInstance from "../utils/axiosInstance";
 
 function Signup() {
   const location=useLocation();
@@ -24,7 +25,7 @@ function Signup() {
       role: data.role,
     };
     //To call the backend API for signup, we use axios here.
-    await axios.post("http://localhost:4001/user/signup", userInfo).then((response) => {
+    await axios.post("/user/signup", userInfo).then((response) => {
       console.log(response.data);
       if (response.status === 201) {
         toast.success('Signup successful!');
@@ -35,7 +36,7 @@ function Signup() {
         ...response.data.user,
         role: response.data.user.role
       }));
-      navigate("/"); // Redirect to home or login page after successful signup
+      navigate("/", { replace: true }); // Redirect to home or login page after successful signup
     }).catch((error) => {
       if(error.response){
         console.log(error);
@@ -56,7 +57,7 @@ function Signup() {
 
         <button
           className="btn btn-sm btn-circle btn-ghost absolute right-3 top-3 dark:text-white"
-          onClick={() => navigate("/")}
+          onClick={() => navigate("/", { replace: true })}
         >
           ✕
         </button>

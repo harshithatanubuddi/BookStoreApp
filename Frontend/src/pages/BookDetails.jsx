@@ -4,6 +4,7 @@ import axios from "axios";
 import Cards from "../components/Cards";
 import { useCart } from "../context/CartContext";
 import { useNavigate } from "react-router-dom";
+import axiosInstance from "../utils/axiosInstance";
 
 function BookDetails() {
   const { id } = useParams();
@@ -20,7 +21,7 @@ function BookDetails() {
   useEffect(() => {
     const fetchBook = async () => {
       try {
-        const res = await axios.get(`http://localhost:4001/book/${id}`);
+        const res = await axios.get(`/book/${id}`);
         setBook(res.data);
       } catch (err) {
         console.log(err);
@@ -33,7 +34,7 @@ function BookDetails() {
   useEffect(() => {
     const fetchRelated = async () => {
       const res = await axios.get(
-        `http://localhost:4001/book/${id}/related`
+        `/book/${id}/related`
       );
       setRelated(res.data);
     };
@@ -45,6 +46,18 @@ function BookDetails() {
   if (!book) {
     return <p className="text-center mt-20">Loading...</p>;
   }
+
+  const handleAddToCart = async () => {
+  try {
+    // 🔐 Backend stock validation
+    await axiosInstance.get(`/book/check-stock/${book._id}`);
+
+    addToCart(book);
+  } catch (err) {
+    alert(err.response?.data?.message || "Out of stock");
+  }
+};
+
 
   return (
   <div className="max-w-screen-lg mx-auto mt-24 px-4">
@@ -107,11 +120,16 @@ function BookDetails() {
   </div>
 ) : (
   <button
-    onClick={() => addToCart(book)}
-    className="mt-6 bg-orange-500 text-white px-6 py-2 rounded-lg hover:bg-orange-600"
-  >
-    Add to Cart
-  </button>
+  onClick={handleAddToCart}
+  disabled={book.stockQuantity <= 0}
+  className={`mt-6 px-6 py-2 rounded-lg text-white ${
+    book.stockQuantity <= 0
+      ? "bg-gray-400 cursor-not-allowed"
+      : "bg-orange-500 hover:bg-orange-600"
+  }`}
+>
+  {book.stockQuantity <= 0 ? "Out of Stock" : "Add to Cart"}
+</button>
 )}
 
 
@@ -132,6 +150,7 @@ function BookDetails() {
         </div>
       </div>
     )}
+    
 
   </div>
 );
