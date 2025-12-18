@@ -24,7 +24,7 @@ function Course() {
   useEffect(() => {
     const getBook = async () => {
       try {
-       const res = await axios.get("http://localhost:4001/book", {
+       const res = await axios.get("https://bookstoreapp-backend-ynkn.onrender.com", {
         params: {
           branch: branch !== "ALL" ? branch : undefined,
           subject: subject !== "ALL" ? subject : undefined,
