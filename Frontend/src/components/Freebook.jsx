@@ -13,7 +13,7 @@ function Freebook() {
   useEffect(() => {
     const fetchHomeBooks = async () => {
       try {
-        const res = await axios.get("http://localhost:4001/book/stats/top-by-branch");
+        const res = await axios.get("https://bookstoreapp-backend-ynkn.onrender.com/stats/top-by-branch");
 
         setBook(res.data);
       } catch (err) {
