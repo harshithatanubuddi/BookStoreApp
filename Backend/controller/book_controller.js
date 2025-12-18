@@ -1,18 +1,99 @@
 import Book from "../model/book_model.js";
 
+/* ================= GET BOOKS ================= */
 export const getBooks = async (req, res) => {
   try {
-    const { page, category } = req.query;  // Get filters from URL
-    let filter = {};
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
 
-    if (page) filter.page = page;          // Filter by page (Home / Course)
-    if (category) filter.category = category; // For Freebook page
+    const { branch, subject, search } = req.query;
 
-    const bookf = await Book.find(filter); // Apply filters
-    res.status(200).json(bookf);
+    // 🔍 Build filter dynamically
+    const query = {};
 
+    if (branch) query.branch = branch;
+    if (subject) query.subject = subject;
+
+    if (search) {
+      query.title = { $regex: search, $options: "i" };
+    }
+
+    const books = await Book.find(query)
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
+
+    const totalBooks = await Book.countDocuments(query);
+
+    res.status(200).json({
+      books,
+      currentPage: page,
+      totalPages: Math.ceil(totalBooks / limit),
+      totalBooks,
+    });
   } catch (error) {
-    console.log("Error:", error);
-    res.status(500).json({ message: error.message });
+    console.error(error);
+    res.status(500).json({ message: "Failed to fetch books" });
+  }
+};
+
+
+/* ================= GET BOOK BY ID ================= */
+export const getBookById = async (req, res) => {
+  const book = await Book.findById(req.params.id);
+  if (!book) return res.status(404).json({ message: "Book not found" });
+  res.json(book);
+};
+
+/* ================= RELATED BOOKS ================= */
+export const getRelatedBooks = async (req, res) => {
+  const book = await Book.findById(req.params.id);
+  if (!book) return res.status(404).json({ message: "Book not found" });
+
+  const related = await Book.find({
+    _id: { $ne: book._id },
+    branch: book.branch,
+    subject: book.subject,
+  }).limit(4);
+
+  res.json(related);
+};
+
+/* ================= ADMIN CRUD ================= */
+export const createBook = async (req, res) => {
+  const book = await Book.create(req.body);
+  res.status(201).json(book);
+};
+
+export const updateBook = async (req, res) => {
+  const book = await Book.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+  });
+  res.json(book);
+};
+
+export const deleteBook = async (req, res) => {
+  await Book.findByIdAndDelete(req.params.id);
+  res.json({ message: "Book deleted" });
+};
+
+/* ================= HOME STATS ================= */
+export const topBooksByBranch = async (req, res) => {
+  try {
+    const data = await Book.aggregate([
+      {
+        $group: {
+          _id: "$branch",
+          bookCount: { $sum: 1 },
+          totalStock: { $sum: "$stockQuantity" }
+        }
+      },
+      { $sort: { bookCount: -1 } }
+    ]);
+
+    res.status(200).json(data);
+  } catch (err) {
+    res.status(500).json({ message: "Failed to load stats" });
   }
 };

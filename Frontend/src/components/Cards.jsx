@@ -1,55 +1,64 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 function Cards({ item }) {
+  const navigate = useNavigate();
   return (
-    <div className="p-3">
-      <div className="bg-white shadow-lg rounded-2xl overflow-hidden 
-                      hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 
-                      border border-gray-100 
-                      dark:bg-slate-800 dark:text-white dark:border-gray-700">
-        
-        {/* Image */}
-        <figure className="h-48 w-full overflow-hidden">
+    <div
+      className="p-3 cursor-pointer"
+      onClick={() => navigate(`/books/${item._id}`)}
+    >
+      <div
+        className="
+          bg-white shadow-lg rounded-2xl overflow-hidden
+          hover:shadow-2xl hover:-translate-y-2 transition-all duration-300
+          border border-gray-100
+          dark:bg-slate-800 dark:text-white dark:border-gray-700
+          h-full flex flex-col
+        "
+      >
+        {/* Image (FIXED HEIGHT ✅) */}
+        <div className="w-full h-56 overflow-hidden bg-gray-100">
           <img
-            src={item.image}
-            alt={item.name}
-            className="h-full w-full object-cover hover:scale-105 transition duration-300"
+            src={item.image || "/placeholder-book.png"}
+            alt={item.title}
+            className="h-full w-full object-cover"
           />
-        </figure>
+        </div>
 
         {/* Content */}
-        <div className="p-5 space-y-3">
-          <h2 className="text-lg font-bold flex justify-between items-center">
-            {item.name}
-
-            {/* Category Badge */}
-            <span className="px-3 py-1 text-xs rounded-full 
-                             bg-orange-100 text-orange-600 font-semibold
-                             dark:bg-orange-900 dark:text-orange-300">
-              {item.category}
-            </span>
+        <div className="p-5 space-y-3 flex flex-col flex-grow">
+          
+          {/* Title (FIXED HEIGHT ✅) */}
+          <h2 className="text-base font-bold h-12 overflow-hidden">
+            {item.title}
           </h2>
 
-          {/* Description */}
-          <p className="text-gray-600 text-sm dark:text-gray-300">
-            {item.title}
+          {/* Author / Category (OPTIONAL INFO, FIXED HEIGHT) */}
+          <p className="text-sm text-gray-600 dark:text-gray-300 h-10 overflow-hidden">
+            {item.author}
           </p>
 
-          <div className="flex justify-between items-center pt-2">
+          {/* Push price + button to bottom */}
+          <div className="mt-auto flex justify-between items-center pt-2">
+            
             {/* Price */}
             <div className="text-lg font-bold text-green-600 dark:text-green-400">
-              {item.price}
+              ₹{item.price}
             </div>
 
             {/* Button */}
-            <button className="px-4 py-2 bg-orange-500 text-white rounded-full shadow 
-                               hover:bg-orange-600 hover:shadow-md 
-                               transition-all duration-200">
-              Buy Now
+            <button
+              onClick={() => navigate(`/books/${item._id}`)}
+              className="
+                px-4 py-2 bg-orange-500 text-white rounded-full
+                hover:bg-orange-600 transition-all duration-200
+              "
+            >
+              View Details
             </button>
           </div>
         </div>
-
       </div>
     </div>
   );

@@ -10,7 +10,7 @@ function Contact() {
 
   const onSubmit = (data) => {
     console.log("CONTACT FORM:", data);
-    alert("Message sent ✅");
+    alert("Message sent");
   };
 
   return (

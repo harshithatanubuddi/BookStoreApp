@@ -1,15 +1,23 @@
-import React from 'react'
+import React, { createContext, useContext, useEffect, useState } from "react";
 
-export const AuthContext = React.createContext();
-export default function AuthProvider({children}) { // children (app.jsx, navbar.jsx banner.jsx etc) will be wrapped inside AuthProvider
-  const initialAuthUser = localStorage.getItem("Users");
-  const [authUser, setAuthUser] = React.useState(initialAuthUser ? JSON.parse(initialAuthUser) : undefined);
+const AuthContext = createContext();
 
-return(
+export default function AuthProvider({ children }) {
+  const [authUser, setAuthUser] = useState(null);
+
+  // 🔥 Sync authUser with localStorage ALWAYS
+  useEffect(() => {
+    const storedUser = localStorage.getItem("Users");
+    if (storedUser) {
+      setAuthUser(JSON.parse(storedUser));
+    }
+  }, []);
+
+  return (
     <AuthContext.Provider value={[authUser, setAuthUser]}>
-        {children}
+      {children}
     </AuthContext.Provider>
-);
+  );
 }
-export const useAuth = () => React.useContext(AuthContext);// custom hook to use auth context  
-// for acessing user globally in the app we will use this hook
+
+export const useAuth = () => useContext(AuthContext);

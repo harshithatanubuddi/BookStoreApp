@@ -1,0 +1,1 @@
+router.post("/checkout", protect, checkoutCart);

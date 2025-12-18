@@ -1,11 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import Login from './Login';
 import Logout from './Logout';
-import { useAuth } from "../context/AuthProvider"; // import useAuth custom hook
+import { useAuth } from "../context/AuthProvider";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useCart } from "../context/CartContext";
+import { Link } from "react-router-dom";
+
 
 function Navbar() {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [openLogin, setOpenLogin] = useState(false);
+
+  const isCoursePage = location.pathname.startsWith("/courses");
+  const [search, setSearch] = useState("");
+  //const [sticky, setSticky] = useState(false);
+  const cartContext = useCart();
+const cart = cartContext?.cart || [];
+const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+
   const [authUser, setAuthUser] = useAuth(); // get authUser and setAuthUser from context
-  console.log(authUser);
+  //console.log(authUser);
   const [theme, setTheme] = useState(
     localStorage.getItem("theme") ? localStorage.getItem("theme") : "light"
   );
@@ -37,7 +52,7 @@ function Navbar() {
   const navItems = (
     <>
       <li><a href="/">Home</a></li>
-      <li><a href="/course">Course</a></li>
+      <li><a href="/courses">Course</a></li>
       <li><a href="/Contact">Contact</a></li>
       <li><a href="/about">About</a></li>
     </>
@@ -85,8 +100,26 @@ function Navbar() {
                 <label className="px-3 py-2 border rounded-md flex items-center gap-2 dark:border-gray-600">
                   <input
                     type="text"
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" && search.trim()) {
+                        // 🏠 From HOME → redirect to Courses with search
+                        if (!isCoursePage) {
+                          navigate(`/courses?search=${encodeURIComponent(search)}`);
+                        }
+                        // 📚 On COURSES → update URL (filter happens there)
+                        else {
+                          navigate(`?search=${encodeURIComponent(search)}`);
+                        }
+                      }
+                    }}
+                    placeholder={
+                      isCoursePage
+                        ? "Search books by title or author"
+                        : "Search GATE books"
+                    }
                     className="grow outline-none dark:bg-slate-900 dark:text-white"
-                    placeholder="Search"
                   />
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="h-4 w-4 opacity-70 dark:text-white">
                     <path fillRule="evenodd" d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z" clipRule="evenodd" />
@@ -121,23 +154,77 @@ function Navbar() {
 
               {/* Login Button */}
 
-              {
-                authUser ? <Logout /> : 
-              <div>
-                <a className="bg-black text-white px-3 py-2 rounded-md hover:bg-slate-800 duration-300 
-                cursor-pointer" onClick={()=>document.getElementById("my_modal_3").showModal()}>
-                  Login
-                </a>
-                <Login/>
-              </div>
-              } 
+              {/* 🛒 CART BUTTON — ALWAYS VISIBLE */}
+              <Link
+                to="/cart"
+                className="relative flex items-center justify-center w-10 h-10 rounded-full
+                          hover:bg-gray-100 dark:hover:bg-slate-700 transition"
+                title="Cart"
+              >
+                🛒
+                {cartCount > 0 && (
+                  <span
+                    className="absolute -top-1 -right-1 bg-orange-500 text-white
+                              text-xs font-bold rounded-full w-5 h-5
+                              flex items-center justify-center"
+                  >
+                    {cartCount}
+                  </span>
+                )}
+              </Link>
+
+              {/* ADMIN */}
+              {authUser?.role === "admin" && (
+                <Link
+                  to="/admin"
+                  className="px-3 py-2 border rounded-md text-orange-500"
+                >
+                  Admin
+                </Link>
+              )}
+              {authUser && (
+                <Link
+                  to="/my-orders"
+                  className="text-xs px-2.5 py-1 rounded border border-gray-300
+                            hover:bg-gray-100 dark:border-gray-600 dark:hover:bg-slate-700
+                            transition font-medium"
+                >
+                  My Orders
+                </Link>
+              )}
+              
+        {/* LOGIN BUTTON */}
+        {!authUser && (
+          <button
+            className="bg-black text-white px-3 py-2 rounded-md hover:bg-slate-800"
+            onClick={() => {
+              const modal = document.getElementById("my_modal_3");
+              if (modal) modal.showModal();
+            }}
+          >
+            Login
+          </button>
+        )}
+
+        {authUser && <Logout />}
+
+      </div>
+
+      {/* 🔴 THIS WAS MISSING */}
+      <Login />
+
             </div>
           </div>
         </div>
-      </div>
+      
+
+      {openLogin && (
+              <Login onClose={() => setOpenLogin(false)} />
+            )}
 
       {/* Spacer */}
       <div className="h-20 md:h-24"></div>
+      {/* Login Modal (must exist in DOM) */}
     </>
   );
 }

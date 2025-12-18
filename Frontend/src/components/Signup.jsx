@@ -20,7 +20,8 @@ function Signup() {
     const userInfo = {
       fullname: data.fullname,   
       email: data.email,
-      password: data.password
+      password: data.password,
+      role: data.role,
     };
     //To call the backend API for signup, we use axios here.
     await axios.post("http://localhost:4001/user/signup", userInfo).then((response) => {
@@ -29,7 +30,11 @@ function Signup() {
         toast.success('Signup successful!');
         navigate(from,{replace:true});
       }
-      localStorage.setItem("Users", JSON.stringify(response.data.user));
+      localStorage.setItem("token", response.data.token);
+      localStorage.setItem("Users", JSON.stringify({
+        ...response.data.user,
+        role: response.data.user.role
+      }));
       navigate("/"); // Redirect to home or login page after successful signup
     }).catch((error) => {
       if(error.response){
@@ -101,16 +106,24 @@ function Signup() {
               type="email"
               placeholder="Enter your email"
               autoComplete="email"
-              {...register("email", { required: true })}
+              {...register("email", {
+                required: "Email is required",
+                pattern: {
+                  value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                  message: "Enter a valid email address"
+                }
+              })}
               className="w-full px-3 py-2 mt-1 border rounded-md outline-none
-                         dark:bg-slate-900 dark:text-white
-                         border-gray-300 dark:border-gray-600"
+                        dark:bg-slate-900 dark:text-white
+                        border-gray-300 dark:border-gray-600"
             />
 
             {errors.email && (
-              <span className="text-sm text-red-500">This field is required</span>
+              <span className="text-sm text-red-500">
+                {errors.email.message}
+              </span>
             )}
-          </div>
+            </div>
 
           {/* Password Field */}
           <div className="mt-4">
@@ -123,14 +136,26 @@ function Signup() {
               type="password"
               placeholder="Enter your password"
               autoComplete="new-password"
-              {...register("password", { required: true })}
+              {...register("password", {
+                required: "Password is required",
+                minLength: {
+                  value: 6,
+                  message: "Password must be at least 6 characters"
+                },
+                pattern: {
+                  value: /^(?=.*[A-Za-z])(?=.*\d).+$/,
+                  message: "Password must contain at least one letter and one number"
+                }
+              })}
               className="w-full px-3 py-2 mt-1 border rounded-md outline-none
-                         dark:bg-slate-900 dark:text-white
-                         border-gray-300 dark:border-gray-600"
+                        dark:bg-slate-900 dark:text-white
+                        border-gray-300 dark:border-gray-600"
             />
 
             {errors.password && (
-              <span className="text-sm text-red-500">This field is required</span>
+              <span className="text-sm text-red-500">
+                {errors.password.message}
+              </span>
             )}
           </div>
 

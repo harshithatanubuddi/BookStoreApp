@@ -1,0 +1,55 @@
+// import axiosInstance from "../../utils/axiosInstance";
+// import { useEffect, useState } from "react";
+
+// function AdminDashboard() {
+//   const [stats, setStats] = useState(null);
+
+//   useEffect(() => {
+//     axiosInstance.get("/admin/stats")
+//       .then(res => setStats(res.data));
+//   }, []);
+
+//   return (
+//     <div className="p-6">
+//       <h1 className="text-2xl font-bold">Admin Dashboard</h1>
+
+//       {stats && (
+//         <div className="grid grid-cols-3 gap-4 mt-6">
+//           <div>Total Users: {stats.users}</div>
+//           <div>Total Books: {stats.books}</div>
+//           <div>Total Orders: {stats.orders}</div>
+//         </div>
+//       )}
+//     </div>
+//   );
+// }
+
+// export default AdminDashboard;
+
+
+// admin/AdminDashboard.jsx
+import { Link } from "react-router-dom";
+
+function AdminDashboard() {
+  return (
+    <div className="max-w-5xl mx-auto mt-24 px-4">
+      <h1 className="text-3xl font-bold mb-6">Admin Dashboard</h1>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <Link to="/admin/books" className="p-6 border rounded-lg">
+          📚 Manage Books
+        </Link>
+
+        <Link to="/admin/users" className="p-6 border rounded-lg">
+          👥 Manage Users
+        </Link>
+
+        <Link to="/admin/create-book" className="p-6 border rounded-lg">
+          ➕ Add New Book
+        </Link>
+      </div>
+    </div>
+  );
+}
+
+export default AdminDashboard;

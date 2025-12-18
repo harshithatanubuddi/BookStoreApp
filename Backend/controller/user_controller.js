@@ -1,52 +1,92 @@
-import User from '../model/user_model.js';
-import bcrypt from 'bcryptjs';
+import User from "../model/user_model.js";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 
-//for signup
+/* ===================== SIGNUP ===================== */
 export const signup = async (req, res) => {
-    try {
-        const { fullname, email, password } = req.body;
+  try {
+    const { fullname, email, password } = req.body;
 
-        // Check if user already exists
-        const userdata = await User.findOne({ email });
-        if (userdata) {
-            return res.status(400).json({ message: 'User already exists' });
-        }
-        const hashPassword = await bcrypt.hash(password, 10);//here 10 is the salt rounds for hashing the password which adds more security than 8(default salt rounds)
-
-        // Create new user
-        const newUser = new User({ fullname, email, password: hashPassword });
-
-        await newUser.save();
-        res.status(201).json({ message: 'User registered successfully', user:{
-            _id: newUser._id,
-            fullname: newUser.fullname,
-            email: newUser.email
-        } });
-    } catch (error) {
-        console.log("Error:", error);
-        res.status(500).json({ message: error.message });
+    if (!fullname || !email || !password) {
+      return res.status(400).json({ message: "All fields are required" });
     }
+
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(409).json({ message: "User already exists" });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const user = await User.create({
+      fullname,
+      email,
+      password: hashedPassword,
+    });
+
+    // 🔐 Generate JWT
+    const token = jwt.sign(
+      { id: user._id },
+      process.env.JWT_SECRET,
+      { expiresIn: "7d" }
+    );
+
+    res.status(201).json({
+      message: "Signup successful",
+      token,
+      user: {
+        _id: user._id,
+        fullname: user.fullname,
+        email: user.email,
+        role: user.role,
+      },
+    });
+
+  } catch (error) {
+    console.error("Signup error:", error);
+    res.status(500).json({ message: "Server error" });
+  }
 };
 
-//for login
+/* ===================== LOGIN ===================== */
 export const login = async (req, res) => {
-    try {
-        const { email, password } = req.body;
-        // Find user by email
-        const userdata = await User.findOne({ email });
-        const isMatch = await bcrypt.compare(password, userdata.password);
-        if (!userdata || !isMatch) {
-            return res.status(400).json({ message: 'Invalid email or password' });
-        }
-        else{
-            res.status(200).json({ message: 'Login successful', user:{
-                _id: userdata._id,
-                fullname: userdata.fullname,
-                email: userdata.email
-            } });
-        }
-    } catch (error) {
-        console.log("Error:", error.message);
-        res.status(500).json({ message: "Internal server error" });
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res.status(400).json({ message: "Email and password required" });
     }
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(401).json({ message: "Invalid credentials" });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(401).json({ message: "Invalid credentials" });
+    }
+
+    // 🔐 Generate JWT
+    const token = jwt.sign(
+      { id: user._id },
+      process.env.JWT_SECRET,
+      { expiresIn: "7d" }
+    );
+
+    res.status(200).json({
+      message: "Login successful",
+      token,
+      user: {
+        _id: user._id,
+        fullname: user.fullname,
+        email: user.email,
+        role: user.role,
+      },
+    });
+
+  } catch (error) {
+    console.error("Login error:", error);
+    res.status(500).json({ message: "Server error" });
+  }
 };

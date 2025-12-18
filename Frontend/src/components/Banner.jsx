@@ -24,62 +24,27 @@ function Banner() {
                        font-extrabold 
                        text-gray-900 dark:text-white 
                        leading-snug sm:leading-tight md:leading-tight">
-          Discover Your Next Favorite Book
-          <span className="text-orange-600"> Today!</span>
+          Prepare Smarter for GATE Exams
+          <span className="text-orange-600"> with the Right Books</span>
+
         </h1>
 
         <p className="mt-4 sm:mt-6 
                       text-gray-700 dark:text-gray-300 
                       text-sm sm:text-base md:text-lg lg:text-xl max-w-md">
-          Explore thousands of books from all genres. Sign up for updates, new arrivals, and exclusive offers!
+          Browse branch-wise GATE preparation books for CSE, ECE, ME, and more — curated for serious exam aspirants.
         </p>
 
-        {/* Email Subscription */}
-        <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-3 sm:gap-4 
-                        w-full sm:w-auto justify-center md:justify-start items-center">
-
-          <label className="flex items-center w-full sm:w-auto 
-                            border border-gray-300 dark:border-gray-600 
-                            rounded-lg px-4 py-2 
-                            bg-white dark:bg-slate-800 
-                            focus-within:ring-2 focus-within:ring-orange-400">
-
-            <svg className="h-5 w-5 text-gray-400 dark:text-gray-300 mr-2"
-                 xmlns="http://www.w3.org/2000/svg"
-                 viewBox="0 0 24 24">
-              <g strokeLinejoin="round" strokeLinecap="round" strokeWidth="2" fill="none" stroke="currentColor">
-                <rect width="20" height="16" x="2" y="4" rx="2"></rect>
-                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
-              </g>
-            </svg>
-
-            <input
-              type="email"
-              placeholder="Enter your email"
-              required
-              className="outline-none w-full text-sm sm:text-base 
-                         bg-transparent 
-                         text-gray-800 dark:text-white"
-            />
-          </label>
-
-          <button className="bg-orange-600 text-white px-6 py-2 sm:py-3 
-                             rounded-lg hover:bg-orange-500 
-                             transition duration-300 font-semibold 
-                             text-sm sm:text-base">
-            Subscribe
-          </button>
-        </div>
-
-        {/* Call to Action */}
-        <div className="mt-4 sm:mt-6">
-          <button className="bg-gray-900 dark:bg-gray-700 
-                             text-white px-6 sm:px-8 py-2 sm:py-3 
-                             rounded-lg 
-                             hover:bg-gray-800 dark:hover:bg-gray-600 
-                             transition duration-300 font-semibold 
-                             text-sm sm:text-base">
-            Explore Books
+        <div className="mt-6">
+          <button
+            onClick={() => window.location.href = "/courses"}
+            className="bg-gray-900 dark:bg-gray-700 
+                      text-white px-6 sm:px-8 py-2 sm:py-3 
+                      rounded-lg 
+                      hover:bg-gray-800 dark:hover:bg-gray-600 
+                      transition duration-300 font-semibold 
+                      text-sm sm:text-base">
+            Explore GATE Books
           </button>
         </div>
 
