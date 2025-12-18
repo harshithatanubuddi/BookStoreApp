@@ -9,7 +9,7 @@ import axiosInstance from "../utils/axiosInstance";
 
 function Freebook() {
   const [book, setBook] = useState([]);
-
+  
   useEffect(() => {
     const fetchHomeBooks = async () => {
       try {

@@ -1,33 +1,3 @@
-// import axiosInstance from "../../utils/axiosInstance";
-// import { useEffect, useState } from "react";
-
-// function AdminDashboard() {
-//   const [stats, setStats] = useState(null);
-
-//   useEffect(() => {
-//     axiosInstance.get("/admin/stats")
-//       .then(res => setStats(res.data));
-//   }, []);
-
-//   return (
-//     <div className="p-6">
-//       <h1 className="text-2xl font-bold">Admin Dashboard</h1>
-
-//       {stats && (
-//         <div className="grid grid-cols-3 gap-4 mt-6">
-//           <div>Total Users: {stats.users}</div>
-//           <div>Total Books: {stats.books}</div>
-//           <div>Total Orders: {stats.orders}</div>
-//         </div>
-//       )}
-//     </div>
-//   );
-// }
-
-// export default AdminDashboard;
-
-
-// admin/AdminDashboard.jsx
 import { Link } from "react-router-dom";
 
 function AdminDashboard() {
