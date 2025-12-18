@@ -14,6 +14,8 @@ function Signup() {
     formState: { errors },
   } = useForm();
 
+  const API = "https://bookstoreapp-backend-ynkn.onrender.com";
+  
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {
@@ -24,7 +26,7 @@ function Signup() {
       role: data.role,
     };
     //To call the backend API for signup, we use axios here.
-    await axios.post("http://localhost:4001/user/signup", userInfo).then((response) => {
+    await axios.post("${API}/user/signup", userInfo).then((response) => {
       console.log(response.data);
       if (response.status === 201) {
         toast.success('Signup successful!');
