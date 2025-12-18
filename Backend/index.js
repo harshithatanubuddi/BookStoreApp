@@ -4,8 +4,11 @@ import mongoose from 'mongoose';
 import bookRoutes from './route/book_route.js';
 import cors from 'cors';
 import userRoutes from './route/user_route.js';
+<<<<<<< HEAD
 import adminRoutes from "./route/admin_route.js";
 import orderRoutes from "./route/order_route.js";
+=======
+>>>>>>> e44d56a5e35b07ef50c9cefef0127706e2cffc5f
 
 dotenv.config();
 const app = express();
@@ -13,10 +16,13 @@ const app = express();
 // Middleware
 app.use(cors());
 app.use(express.json());
+<<<<<<< HEAD
 app.use("/admin", adminRoutes);
 app.use("/book", bookRoutes);
 app.use("/api/orders", orderRoutes);
 
+=======
+>>>>>>> e44d56a5e35b07ef50c9cefef0127706e2cffc5f
 
 const port = process.env.PORT || 4000;
 

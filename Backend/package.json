@@ -19,7 +19,9 @@
     "url": "https://github.com/harshithatanubuddi/BookStoreApp/issues"
   },
   "homepage": "https://github.com/harshithatanubuddi/BookStoreApp#readme",
+  
   "dependencies": {
+<<<<<<< HEAD
     "axios": "^1.13.2",
     "bcryptjs": "^3.0.3",
     "cors": "^2.8.5",
@@ -27,6 +29,13 @@
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.0.1"
+=======
+  "bcryptjs": "^3.0.3",
+  "cors": "^2.8.5",
+  "dotenv": "^17.2.3",
+  "express": "^5.2.1",
+  "mongoose": "^9.0.1"
+>>>>>>> e44d56a5e35b07ef50c9cefef0127706e2cffc5f
   },
   "devDependencies": {
     "nodemon": "^3.1.11"
