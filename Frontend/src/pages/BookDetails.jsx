@@ -17,6 +17,8 @@ function BookDetails() {
     ? cart.some((item) => item._id === book._id)
     : false;
 
+  const API = "https://bookstoreapp-backend-ynkn.onrender.com";
+  
   useEffect(() => {
     const fetchBook = async () => {
       try {
@@ -33,7 +35,7 @@ function BookDetails() {
   useEffect(() => {
     const fetchRelated = async () => {
       const res = await axios.get(
-        `http://localhost:4001/book/${id}/related`
+        `${API}/book/${id}/related`
       );
       setRelated(res.data);
     };
