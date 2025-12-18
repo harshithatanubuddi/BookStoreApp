@@ -20,11 +20,13 @@ function Course() {
   const [totalPages, setTotalPages] = useState(1);
   const [book, setBook] = useState([]);
 
+  const API = "https://bookstoreapp-backend-ynkn.onrender.com";
+
   // ✅ Fetch books
   useEffect(() => {
     const getBook = async () => {
       try {
-       const res = await axios.get("https://bookstoreapp-backend-ynkn.onrender.com", {
+       const res = await axios.get("${API}/books", {
         params: {
           branch: branch !== "ALL" ? branch : undefined,
           subject: subject !== "ALL" ? subject : undefined,
