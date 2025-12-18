@@ -1,10 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Cards from './Cards';
-<<<<<<< HEAD
 import { Link, useSearchParams, useNavigate } from 'react-router-dom';
-=======
-import { Link } from 'react-router-dom';
->>>>>>> e44d56a5e35b07ef50c9cefef0127706e2cffc5f
 import axios from 'axios';
 
 function Course() {
