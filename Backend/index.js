@@ -36,8 +36,13 @@ mongoose.connect(URI, {
 }).then(() => console.log("Connected to MongoDB"))
   .catch(error => console.error("Error connecting to MongoDB:", error));
 
-app.get('/', (req, res) => {
-  res.send("MERN Project hi");
+app.get("/", (req, res) => {
+  res.status(200).json({
+    status: "OK",
+    service: "BookStore API",
+    uptime: process.uptime(),
+    timestamp: new Date().toISOString(),
+  });
 });
 
 //define book routes

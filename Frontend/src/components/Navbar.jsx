@@ -84,7 +84,17 @@ function Navbar() {
                   {navItems}
                 </ul>
               </div>
-              <a className="text-2xl font-bold cursor-pointer dark:text-white">BookStore</a>
+              <Link
+                to="/"
+                className="flex flex-col leading-tight cursor-pointer"
+              >
+                <span className="text-2xl font-bold text-orange-500 dark:text-orange-400">
+                  LibroStack
+                </span>
+                <span className="text-xs text-gray-500 dark:text-gray-400">
+                  GATE Prep Books
+                </span>
+              </Link>
             </div>
 
             {/* Right */}
