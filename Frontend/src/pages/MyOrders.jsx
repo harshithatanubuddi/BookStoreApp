@@ -3,12 +3,26 @@ import axiosInstance from "../utils/axiosInstance";
 
 function MyOrders() {
   const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axiosInstance.get("/order/my-orders")
-      .then(res => setOrders(res.data))
-      .catch(err => console.log(err));
+  const fetchOrders = async () => {
+    try {
+      const res = await axiosInstance.get("/order/my-orders");
+      setOrders(res.data || []);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+    fetchOrders();
   }, []);
+
+  if (loading) {
+    return <p className="p-6">Loading orders...</p>;
+  }
 
   if (orders.length === 0) {
     return <p className="p-6">No orders found.</p>;

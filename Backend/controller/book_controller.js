@@ -9,7 +9,7 @@ export const getBooks = async (req, res) => {
 
     const { branch, subject, search } = req.query;
 
-    // 🔍 Build filter dynamically
+    // Build filter dynamically
     const query = {};
 
     if (branch) query.branch = branch;

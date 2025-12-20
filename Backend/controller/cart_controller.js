@@ -20,7 +20,7 @@ export const checkoutCart = async (req, res) => {
       }
     }
 
-    // 🔒 If ALL items pass, then deduct stock
+    // If ALL items pass, then deduct stock
     for (const item of items) {
       await Book.findByIdAndUpdate(item.bookId, {
         $inc: { stockQuantity: -item.quantity },

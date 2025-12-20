@@ -5,28 +5,6 @@ import { Link } from "react-router-dom";
 function Cart() {
   const { cart, removeFromCart, clearCart } = useCart();
 
-//   const checkout = async () => {
-//   try {
-//     await axiosInstance.post("/cart/checkout", {
-//       items: cart.map(item => ({
-//         bookId: item._id,
-//         quantity: item.quantity,
-//       })),
-//     });
-
-//     alert("Order placed successfully");
-//     clearCart();
-//   } catch (err) {
-//     alert(err.response.data.message);
-//   }
-// };
-// <button
-//   onClick={checkout}
-//   className="bg-green-600 text-white px-4 py-2 rounded mt-4"
-// >
-//   Checkout
-// </button>
-
   const total = cart.reduce(
     (sum, item) => sum + Number(item.price || 0) * (item.quantity || 1),
     0
@@ -63,16 +41,14 @@ function Cart() {
 
       <h2 className="text-xl font-bold mt-6">Total: ₹{total}</h2>
 
-      {/* ✅ FIXED CLEAR CART */}
+      {/* CLEAR CART */}
       {cart.length > 0 && (
         <button
-  onClick={clearCart}
-  className="mt-4 mr-4 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
->
-  Clear Cart
-</button>
-
-        
+          onClick={clearCart}
+          className="mt-4 mr-4 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+        >
+          Clear Cart
+        </button>       
       )}
       {cart.length > 0 && <CheckoutButton />}
     </div>

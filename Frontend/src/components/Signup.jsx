@@ -2,7 +2,6 @@ import React from 'react';
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import Login from "./Login"; 
 import { useForm } from "react-hook-form";
-import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import axiosInstance from "../utils/axiosInstance";
 
@@ -25,8 +24,8 @@ function Signup() {
       role: data.role,
     };
     //To call the backend API for signup, we use axios here.
-    await axios.post("/user/signup", userInfo).then((response) => {
-      console.log(response.data);
+    await axiosInstance.post("/user/signup", userInfo).then((response) => {
+      //console.log(response.data);
       if (response.status === 201) {
         toast.success('Signup successful!');
         navigate(from,{replace:true});
@@ -66,10 +65,10 @@ function Signup() {
           Create an Account
         </h3>
 
-        {/* ✅ FORM STARTS */}
+        {/* FORM STARTS */}
         <form onSubmit={handleSubmit(onSubmit)}>
 
-          {/* ⭐ Username Field (Added) */}
+          {/* Username Field (Added) */}
           <div className="mt-6">
             <label
               htmlFor="username"

@@ -98,7 +98,7 @@ function Admin() {
 
     setOpen(false);
     setEditingBook(null);
-    await fetchBooks(); // ✅ DATABASE IS SOURCE OF TRUTH
+    await fetchBooks(); 
 
   } catch (err) {
     alert(err.response?.data?.message || "Failed to save book");

@@ -14,7 +14,7 @@ BODY:
 export const checkout = async (req, res) => {
   const { items } = req.body;
 
-  // ✅ Validate BEFORE transaction
+  // Validate BEFORE transaction
   if (!items || items.length === 0) {
     return res.status(400).json({ message: "Cart is empty" });
   }
@@ -28,7 +28,7 @@ export const checkout = async (req, res) => {
     let totalAmount = 0;
     const orderItems = [];
 
-    // 🔐 Atomic stock check + decrement
+    // Atomic stock check + decrement
     for (const item of items) {
       const book = await Book.findOneAndUpdate(
         {
@@ -94,9 +94,6 @@ export const getMyOrders1 = async (req, res) => {
     res.status(500).json({ message: "Failed to fetch orders" });
   }
 };
-
-
-
 
 export const updateOrderStatus = async (req, res) => {
   const { status } = req.body;

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useAuth } from "../context/AuthProvider"; 
 import { toast } from 'react-hot-toast';
-import { useCart } from "../context/CartContext";   // ✅ ADD THIS
+import { useCart } from "../context/CartContext";  
 import { useNavigate } from "react-router-dom";
 
 function Logout() {
@@ -10,12 +10,11 @@ function Logout() {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    try {
-      setAuthUser(null);           // Clear user from context
+    try {          
       localStorage.removeItem("token");
       localStorage.removeItem("Users");
       toast.success("Logout Successful");
-      clearCart();              // 🔥 THIS IS THE FIX
+      clearCart();              
       setAuthUser(null);
             setTimeout(() => {
                 window.location.reload();

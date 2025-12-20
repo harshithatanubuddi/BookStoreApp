@@ -14,10 +14,10 @@ function Navbar() {
 
   const isCoursePage = location.pathname.startsWith("/courses");
   const [search, setSearch] = useState("");
-  //const [sticky, setSticky] = useState(false);
+
   const cartContext = useCart();
-const cart = cartContext?.cart || [];
-const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+  const cart = cartContext?.cart || [];
+  const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
 
   const [authUser, setAuthUser] = useAuth(); // get authUser and setAuthUser from context
   //console.log(authUser);
@@ -104,11 +104,11 @@ const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
                     onChange={(e) => setSearch(e.target.value)}
                     onKeyDown={(e) => {
                       if (e.key === "Enter" && search.trim()) {
-                        // 🏠 From HOME → redirect to Courses with search
+                        // From HOME → redirect to Courses with search
                         if (!isCoursePage) {
                           navigate(`/courses?search=${encodeURIComponent(search)}`);
                         }
-                        // 📚 On COURSES → update URL (filter happens there)
+                        // On COURSES → update URL (filter happens there)
                         else {
                           navigate(`?search=${encodeURIComponent(search)}`);
                         }
@@ -210,7 +210,6 @@ const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
 
       </div>
 
-      {/* 🔴 THIS WAS MISSING */}
       <Login />
 
             </div>

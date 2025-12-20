@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import { useAuth } from "../context/AuthProvider";
 import axiosInstance from "../utils/axiosInstance";
@@ -15,86 +14,44 @@ function Login() {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const API = "https://bookstoreapp-backend-ynkn.onrender.com";
-  // const onSubmit = async (data) => {
-  //   const userInfo = {  
-  //         email: data.email,
-  //         password: data.password,
-  //       };
-  //       //To call the backend API for signup, we use axios here.
-  //       await axios.post("http://localhost:4001/user/login", userInfo).then((response) => {
-  //         console.log(response.data);
-  //         if (response.status === 200) {
-  //           toast.success("Login successful!");
-  //           localStorage.setItem("token", response.data.token);
-  //           localStorage.setItem("Users", JSON.stringify({
-  //             ...response.data.user,
-  //             role: response.data.user.role
-  //           }));
-  //           //localStorage.setItem("Users", JSON.stringify(response.data.user));
-  //           setAuthUser(response.data.user);
-  //           document.getElementById("my_modal_3").close();
-  //           if (user.role === "admin") {
-  //             navigate("/admin");
-  //           } else {
-  //             navigate("/");
-  //           }
-  //           /*setTimeout(() => {
-  //             window.location.reload();
-  //           }, 500);*/
-  //         }
-          
-          
-  //         navigate("/"); // Redirect to home or login page after successful signup
-  //       }).catch((error) => {
-  //         if(error.response){
-  //           console.log(error);
-  //           toast.error('Login failed! Please sign up');
-  //           setTimeout(() => {},1000);
-  //           return;
-  //         }
-  //         console.error("There was an error during signup!", error);
-  //         alert("Signup failed! Please try again."+error.message);
-  //       });
-  // };
 
-const onSubmit = async (data) => {
-  try {
-    const response = await axios.post(
-      "/user/login",
-      {
-        email: data.email,
-        password: data.password,
-      }
-    );
-
-    const { token, user } = response.data;
-
-    toast.success("Login successful!");
-
-    localStorage.setItem("token", token);
-    localStorage.setItem("Users", JSON.stringify(user));
-
-    setAuthUser(user);
-
-    document.getElementById("my_modal_3").close();
-
-    // ✅ ROLE-BASED REDIRECT
-    if (user.role === "admin") {
-      navigate("/admin");
-    } else {
-      navigate("/", { replace: true });
+  const onSubmit = async (data) => {
+    try {
+      const response = await axiosInstance.post(
+    "/user/login",
+    {
+      email: data.email,
+      password: data.password,
     }
+      );
 
-  } catch (error) {
-    console.error(error);
-    toast.error("Login failed! Please check credentials.");
-  }
-};
+      const { token, user } = response.data;
+
+      toast.success("Login successful!");
+
+      localStorage.setItem("token", token);
+      localStorage.setItem("Users", JSON.stringify(user));
+
+      setAuthUser(user);
+
+      document.getElementById("my_modal_3").close();
+
+      // ROLE-BASED REDIRECT
+      if (user.role === "admin") {
+        navigate("/admin");
+      } else {
+        navigate("/", { replace: true });
+      }
+
+    } catch (error) {
+      console.error(error);
+      toast.error("Login failed! Please check credentials.");
+    }
+  };
 
   const goToSignup = () => {
-    document.getElementById("my_modal_3").close();  // ✅ Close login modal
-    navigate("/signup");   // ✅ Redirect to signup
+    document.getElementById("my_modal_3").close();  // Close login modal
+    navigate("/signup");   // Redirect to signup
   };
 
   return (
@@ -183,7 +140,7 @@ const onSubmit = async (data) => {
               <p className="text-sm">
                 Not registered?{" "}
                 <button
-                  onClick={goToSignup}        // ✅ FIXED HERE
+                  onClick={goToSignup}        // FIXED HERE
                   className="underline text-blue-500 hover:text-blue-700"
                 >
                   Signup

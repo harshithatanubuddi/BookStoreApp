@@ -4,17 +4,18 @@ const AuthContext = createContext();
 
 export default function AuthProvider({ children }) {
   const [authUser, setAuthUser] = useState(null);
+  const [authLoading, setAuthLoading] = useState(true);
 
-  // 🔥 Sync authUser with localStorage ALWAYS
   useEffect(() => {
     const storedUser = localStorage.getItem("Users");
     if (storedUser) {
       setAuthUser(JSON.parse(storedUser));
     }
+    setAuthLoading(false);
   }, []);
 
   return (
-    <AuthContext.Provider value={[authUser, setAuthUser]}>
+    <AuthContext.Provider value={[authUser, setAuthUser, authLoading]}>
       {children}
     </AuthContext.Provider>
   );

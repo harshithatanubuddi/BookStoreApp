@@ -6,7 +6,7 @@ import Signup from './components/Signup';
 import Contact from "./components/Contact";
 import About from "./components/About";
 import { Toaster } from 'react-hot-toast';
-import { useAuth } from "./context/AuthProvider"; // import useAuth custom hook
+import { useAuth } from "./context/AuthProvider";
 import BookDetails from './pages/BookDetails';
 import Cart from './pages/Cart.jsx';
 import AdminRoute from "./froutes/fAdminRoute";
@@ -15,14 +15,13 @@ import AdminBooks from "./pages/adminpages/AdminBooks";
 import Admin from "./pages/Admin";
 import MyOrders from './pages/MyOrders.jsx';
 import OrderSuccess from './pages/OrderSuccess.jsx';
+import ProtectedRoute from "./context/ProtectedRoute";
 
 const App = () => {
   const [authUser, setAuthUser] = useAuth(); // get authUser and setAuthUser from context
   console.log(authUser);
   return (
     <>
-    {/*<Home />
-    <Course />*/}
     <div className="dark:bg-slate-900 dark:text-white">
       <Routes>
 
@@ -57,13 +56,15 @@ const App = () => {
           </AdminRoute>
         }
       />
+      <Route path="/order-success" element={<OrderSuccess />} />
       <Route
         path="/my-orders"
         element={
-          authUser ? <MyOrders /> : <Navigate to="/login" />
+          <ProtectedRoute>
+            <MyOrders />
+          </ProtectedRoute>
         }
       />
-      <Route path="/order-success" element={<OrderSuccess />} />
 
     </Routes>
     <Toaster />

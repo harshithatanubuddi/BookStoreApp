@@ -7,10 +7,10 @@ import {
 
 const router = express.Router();
 
-// 📊 Admin dashboard stats
+// Admin dashboard stats
 router.get("/stats", protect, isAdmin, adminStats);
 
-// 👥 Get all users
+// Get all users
 router.get("/users", protect, isAdmin, getAllUsers);
 
 export default router;

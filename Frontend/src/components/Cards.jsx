@@ -17,7 +17,7 @@ function Cards({ item }) {
           h-full flex flex-col
         "
       >
-        {/* Image (FIXED HEIGHT ✅) */}
+        {/* Image */}
         <div className="w-full h-56 overflow-hidden bg-gray-100">
           <img
             src={item.image || "/placeholder-book.png"}
@@ -29,12 +29,12 @@ function Cards({ item }) {
         {/* Content */}
         <div className="p-5 space-y-3 flex flex-col flex-grow">
           
-          {/* Title (FIXED HEIGHT ✅) */}
+          {/* Title */}
           <h2 className="text-base font-bold h-12 overflow-hidden">
             {item.title}
           </h2>
 
-          {/* Author / Category (OPTIONAL INFO, FIXED HEIGHT) */}
+          {/* Author / Category */}
           <p className="text-sm text-gray-600 dark:text-gray-300 h-10 overflow-hidden">
             {item.author}
           </p>

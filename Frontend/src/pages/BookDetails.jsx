@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import axios from "axios";
 import Cards from "../components/Cards";
 import { useCart } from "../context/CartContext";
 import { useNavigate } from "react-router-dom";
@@ -21,7 +20,7 @@ function BookDetails() {
   useEffect(() => {
     const fetchBook = async () => {
       try {
-        const res = await axios.get(`/book/${id}`);
+        const res = await axiosInstance.get(`/book/${id}`);
         setBook(res.data);
       } catch (err) {
         console.log(err);
@@ -33,7 +32,7 @@ function BookDetails() {
 
   useEffect(() => {
     const fetchRelated = async () => {
-      const res = await axios.get(
+      const res = await axiosInstance.get(
         `/book/${id}/related`
       );
       setRelated(res.data);
@@ -49,7 +48,7 @@ function BookDetails() {
 
   const handleAddToCart = async () => {
   try {
-    // 🔐 Backend stock validation
+    // Backend stock validation
     await axiosInstance.get(`/book/check-stock/${book._id}`);
 
     addToCart(book);
@@ -102,41 +101,39 @@ function BookDetails() {
         </p>
 
         {inCart ? (
-  <div className="flex gap-4 mt-6">
-    <button
-      disabled
-      className="px-6 py-2 rounded-lg bg-green-500 text-white font-semibold cursor-default"
-    >
-      ✔ In Cart
-    </button>
+          <div className="flex gap-4 mt-6">
+            <button
+              disabled
+              className="px-6 py-2 rounded-lg bg-green-500 text-white font-semibold cursor-default"
+            >
+              ✔ In Cart
+            </button>
 
-    <button
-      onClick={() => navigate("/cart")}
-      className="px-6 py-2 rounded-lg border border-orange-500 text-orange-500
-                 hover:bg-orange-500 hover:text-white transition"
-    >
-      Go to Cart →
-    </button>
-  </div>
-) : (
-  <button
-  onClick={handleAddToCart}
-  disabled={book.stockQuantity <= 0}
-  className={`mt-6 px-6 py-2 rounded-lg text-white ${
-    book.stockQuantity <= 0
-      ? "bg-gray-400 cursor-not-allowed"
-      : "bg-orange-500 hover:bg-orange-600"
-  }`}
->
-  {book.stockQuantity <= 0 ? "Out of Stock" : "Add to Cart"}
-</button>
-)}
-
-
+            <button
+              onClick={() => navigate("/cart")}
+              className="px-6 py-2 rounded-lg border border-orange-500 text-orange-500
+                        hover:bg-orange-500 hover:text-white transition"
+            >
+              Go to Cart →
+            </button>
+          </div>
+        ) : (
+          <button
+          onClick={handleAddToCart}
+          disabled={book.stockQuantity <= 0}
+          className={`mt-6 px-6 py-2 rounded-lg text-white ${
+            book.stockQuantity <= 0
+              ? "bg-gray-400 cursor-not-allowed"
+              : "bg-orange-500 hover:bg-orange-600"
+          }`}
+        >
+          {book.stockQuantity <= 0 ? "Out of Stock" : "Add to Cart"}
+        </button>
+        )}
       </div>
     </div>
 
-    {/* ✅ RELATED BOOKS (CORRECT PLACE) */}
+    {/* RELATED BOOKS */}
     {related.length > 0 && (
       <div className="mt-20">
         <h2 className="text-2xl font-bold mb-6">
@@ -150,8 +147,6 @@ function BookDetails() {
         </div>
       </div>
     )}
-    
-
   </div>
 );
 }

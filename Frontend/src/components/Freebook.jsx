@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Slider from "react-slick";
 import Cards from "./Cards";
-import axios from "axios";
 
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -9,23 +8,26 @@ import axiosInstance from "../utils/axiosInstance";
 
 function Freebook() {
   const [book, setBook] = useState([]);
+  const [loading, setLoading] = useState(true);
   
   useEffect(() => {
-    const fetchHomeBooks = async () => {
-      try {
-        const res = await axios.get("https://bookstoreapp-backend-ynkn.onrender.com/book/stats/top-by-branch");
+  const fetchHomeBooks = async () => {
+    try {
+      setLoading(true); // start loading
 
-        setBook(Array.isArray(res.data.books) ? res.data.books : []);
-      } catch (err) {
-        console.error("Error loading Home books:", err);
-        setBook([]);
-      }
-    };
+      const res = await axiosInstance.get("/book/stats/top-by-branch");
+      setBook(Array.isArray(res.data) ? res.data : []);
+    } catch (err) {
+      console.error("Error loading Home books:", err);
+      setBook([]);
+    } finally {
+      setLoading(false); // stop loading
+    }
+  };
 
-    fetchHomeBooks();
-  }, []);
+  fetchHomeBooks();
+}, []);
 
-  const filterData = book; // already filtered by backend
 
   const settings = {
     dots: true,
@@ -48,9 +50,6 @@ function Freebook() {
     ">
 
       <div className="text-center mb-10">
-        {/* <h1 className="text-4xl font-extrabold text-gray-900 dark:text-white tracking-tight">
-          <span className="text-orange-600">Free</span> Courses for You 🎁
-        </h1> */}
         <h1 className="text-4xl font-extrabold text-gray-900 dark:text-white tracking-tight">
           GATE Books by Branch
         </h1>
@@ -79,21 +78,12 @@ function Freebook() {
             p-6 md:p-10
           "
         >
-          {/* <Slider {...settings}>
-            {filterData.map((item) => (
-              <Cards key={item._id} item={item} />
-            ))}
-          </Slider> */}
-          {book.length > 0 ? (
-              book.map((item) => (
-                <Card key={item._id} item={item} />
-              ))
-            ) : (
-              <p>No books available</p>
-            )}
-          <Slider {...settings}>
-            
-
+          {loading ? (
+            <p className="text-center text-gray-500">Loading books...</p>
+          ) : book.length === 0 ? (
+            <p className="text-center text-gray-500">No books available</p>
+          ) : (
+              <Slider {...settings}>
             {book.map((item) => (
               <div
               key={item._id}
@@ -126,7 +116,7 @@ function Freebook() {
             </div>
             ))}
           </Slider>
-
+            )}
         </div>
       </div>
 

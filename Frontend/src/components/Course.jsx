@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import Cards from './Cards';
 import { Link, useSearchParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import axiosInstance from "../utils/axiosInstance";
 
 function Course() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   
-  // ✅ Read from URL
+  // Read from URL
   const initialBranch = searchParams.get("branch") || "ALL";
   const initialSubject = searchParams.get("subject") || "ALL";
   const initialPage = Number(searchParams.get("page")) || 1;
@@ -19,44 +18,49 @@ function Course() {
   const [subject, setSubject] = useState(initialSubject);
   const [page, setPage] = useState(initialPage);
   const [totalPages, setTotalPages] = useState(1);
+
   const [book, setBook] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const API = "https://bookstoreapp-backend-ynkn.onrender.com";
-
-  // ✅ Fetch books
+  // Fetch books
   useEffect(() => {
-    const getBook = async () => {
-      try {
-       const res = await axios.get("/book", {
+  const getBook = async () => {
+    try {
+      setLoading(true); // START loading
 
+      const res = await axiosInstance.get("/book", {
         params: {
           branch: branch !== "ALL" ? branch : undefined,
           subject: subject !== "ALL" ? subject : undefined,
-          search: searchQuery !== "ALL" ? searchQuery : undefined,
+          search: searchQuery || undefined,
           page,
           limit: 16
         }
       });
 
-        setBook(res.data.books || []);
-        setTotalPages(res.data.totalPages || 1);
-      } catch (error) {
-        console.log("Error:", error);
-      }
-    };
+      setBook(Array.isArray(res.data.books) ? res.data.books : []);
+      setTotalPages(res.data.totalPages ?? 1);
+    } catch (error) {
+      console.log("Error:", error);
+    } finally {
+      setLoading(false); // END loading
+    }
+  };
 
-    getBook();
-  }, [branch, subject, page, searchQuery]);
+  getBook();
+}, [branch, subject, page, searchQuery]);
 
-  // ✅ Sync state → URL
+
+  // Sync state → URL
   useEffect(() => {
     const params = new URLSearchParams();
     if (branch !== "ALL") params.set("branch", branch);
     if (subject !== "ALL") params.set("subject", subject);
     if (page !== 1) params.set("page", page);
+    if (searchQuery) params.set("search", searchQuery);
 
     navigate({ search: params.toString() }, { replace: true });
-  }, [branch, subject, page, navigate]);
+  }, [branch, subject, page, searchQuery, navigate]);
 
   return (
     <div className="max-w-screen-2xl container mx-auto md:px-20 px-4">
@@ -159,7 +163,11 @@ function Course() {
 
       {/* Books */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 mb-16">
-        {book.length > 0 ? (
+        {loading ? (
+          <p className="text-center col-span-full text-gray-500">
+            Loading books...
+          </p>
+        ) : book.length > 0 ? (
           book.map((item) => <Cards key={item._id} item={item} />)
         ) : (
           <p className="text-center col-span-full text-gray-500">

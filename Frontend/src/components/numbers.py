@@ -1,5 +1,0 @@
-f=open("covid.txt","r")
-print(f.readline())
-print(f.readline())
-print(f.readline())
-f.close()
