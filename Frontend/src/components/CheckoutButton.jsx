@@ -17,11 +17,7 @@ function CheckoutButton() {
           bookId: item._id,
           quantity: item.quantity,
         })),
-      },
-      {
-          withCredentials: true, // REQUIRED FOR RENDER
-      }
-      );
+      });
 
       clearCart();
       navigate("/order-success");
